@@ -25,8 +25,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter(isPointPast),
 };
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
-
-export {filter, updateItem};
+export {filter};
