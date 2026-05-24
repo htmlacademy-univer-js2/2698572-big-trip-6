@@ -102,9 +102,20 @@ export default class BoardPresenter {
 
   #renderTripInfo() {
     if (this.#tripInfoComponent) {
+      remove(this.#tripInfoComponent);
+      this.#tripInfoComponent = null;
+    }
+
+    const points = this.#pointsModel.points;
+    if (points.length === 0) {
       return;
     }
-    this.#tripInfoComponent = new TripInfoView();
+
+    this.#tripInfoComponent = new TripInfoView({
+      points,
+      destinations: this.#destinationsModel.destinations,
+      offers: this.#offersModel.offers,
+    });
     render(this.#tripInfoComponent, this.#tripMainContainer, RenderPosition.AFTERBEGIN);
   }
 
