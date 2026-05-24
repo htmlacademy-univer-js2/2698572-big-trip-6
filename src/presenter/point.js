@@ -80,6 +80,27 @@ export default class PointPresenter {
     }
   }
 
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#editPointComponent.setSaving();
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#editPointComponent.setDeleting();
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    this.#editPointComponent.setAborting();
+  }
+
   #replacePointToForm() {
     this.#handleModeChange();
     replace(this.#editPointComponent, this.#pointComponent);
@@ -112,7 +133,6 @@ export default class PointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
-    this.#replaceFormToPoint();
   };
 
   #handleDeleteClick = (point) => {
