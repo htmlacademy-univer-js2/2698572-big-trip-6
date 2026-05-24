@@ -17,7 +17,10 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
+
+const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
 const DEFAULT_POINT = {
   type: 'flight',
@@ -29,4 +32,4 @@ const DEFAULT_POINT = {
   isFavorite: false,
 };
 
-export {EVENT_TYPES, FilterType, UserAction, UpdateType, DEFAULT_POINT};
+export {EVENT_TYPES, FilterType, UserAction, UpdateType, DEFAULT_POINT, END_POINT};
