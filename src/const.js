@@ -7,26 +7,14 @@ const FilterType = {
   PAST: 'past',
 };
 
-const UserAction = {
-  UPDATE_POINT: 'UPDATE_POINT',
-  ADD_POINT: 'ADD_POINT',
-  DELETE_POINT: 'DELETE_POINT',
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer',
 };
 
-const UpdateType = {
-  PATCH: 'PATCH',
-  MINOR: 'MINOR',
-  MAJOR: 'MAJOR',
-};
+const DISABLED_SORT_TYPES = [SortType.EVENT, SortType.OFFER];
 
-const DEFAULT_POINT = {
-  type: 'flight',
-  destination: '',
-  dateFrom: new Date().toISOString(),
-  dateTo: new Date().toISOString(),
-  basePrice: 0,
-  offers: [],
-  isFavorite: false,
-};
-
-export {EVENT_TYPES, FilterType, UserAction, UpdateType, DEFAULT_POINT};
+export {EVENT_TYPES, FilterType, SortType, DISABLED_SORT_TYPES};
