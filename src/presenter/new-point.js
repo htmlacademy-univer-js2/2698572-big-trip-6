@@ -49,9 +49,16 @@ export default class NewPointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
+  setSaving() {
+    this.#editPointComponent?.setSaving();
+  }
+
+  setAborting() {
+    this.#editPointComponent?.setAborting();
+  }
+
   #handleFormSubmit = (point) => {
     this.#handleDataChange(UserAction.ADD_POINT, UpdateType.MINOR, point);
-    this.destroy();
   };
 
   #handleCancelClick = () => {
