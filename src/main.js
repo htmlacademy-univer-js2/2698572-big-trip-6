@@ -40,9 +40,10 @@ const filterPresenter = new FilterPresenter({
 filterPresenter.init();
 boardPresenter.init();
 
-Promise.all([
+Promise.allSettled([
   offersModel.init(),
   destinationsModel.init(),
-]).finally(() => {
-  pointsModel.init();
+]).then((results) => {
+  const hasDependencyError = results.some((result) => result.status === 'rejected');
+  pointsModel.init(hasDependencyError);
 });
