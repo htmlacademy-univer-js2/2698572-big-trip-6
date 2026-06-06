@@ -1,12 +1,13 @@
 import {render, RenderPosition, remove} from '../framework/render.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
-import {FilterType, UserAction, UpdateType} from '../const.js';
-import {filter} from '../utils.js';
+import {FilterType, SortType, UserAction, UpdateType} from '../const.js';
+import {filter, sort} from '../utils.js';
 import TripInfoView from '../view/trip-info.js';
 import SortView from '../view/sort.js';
 import EventListView from '../view/event-list.js';
 import ListEmptyView from '../view/list-empty.js';
 import LoadingView from '../view/loading.js';
+import LoadErrorView from '../view/load-error.js';
 import PointPresenter from './point.js';
 import NewPointPresenter from './new-point.js';
 
@@ -27,12 +28,14 @@ export default class BoardPresenter {
   #tripInfoComponent = null;
   #sortComponent = null;
   #listEmptyComponent = null;
+  #loadErrorComponent = null;
   #loadingComponent = new LoadingView();
   #eventListComponent = new EventListView();
 
   #pointPresenters = new Map();
   #newPointPresenter = null;
 
+  #currentSortType = SortType.DAY;
   #isLoading = true;
   #isLoadError = false;
   #uiBlocker = new UiBlocker({
@@ -61,7 +64,8 @@ export default class BoardPresenter {
   get points() {
     const filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    return filter[filterType](points);
+    const filteredPoints = filter[filterType](points);
+    return sort[this.#currentSortType](filteredPoints);
   }
 
   init() {
@@ -120,13 +124,31 @@ export default class BoardPresenter {
   }
 
   #renderSort() {
-    this.#sortComponent = new SortView();
+    this.#sortComponent = new SortView({
+      currentSortType: this.#currentSortType,
+      onSortTypeChange: this.#handleSortTypeChange,
+    });
     render(this.#sortComponent, this.#tripEventsContainer);
   }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#currentSortType = sortType;
+    this.#clearBoard();
+    this.#renderBoard();
+  };
 
   #renderEmpty() {
     this.#listEmptyComponent = new ListEmptyView({filterType: this.#filterModel.filter});
     render(this.#listEmptyComponent, this.#tripEventsContainer);
+  }
+
+  #renderError() {
+    this.#loadErrorComponent = new LoadErrorView();
+    render(this.#loadErrorComponent, this.#tripEventsContainer);
   }
 
   #renderLoading() {
@@ -232,7 +254,11 @@ export default class BoardPresenter {
         this.#pointPresenters.get(data.id)?.init(data);
         break;
       case UpdateType.MINOR:
+        this.#clearBoard();
+        this.#renderBoard();
+        break;
       case UpdateType.MAJOR:
+        this.#currentSortType = SortType.DAY;
         this.#clearBoard();
         this.#renderBoard();
         break;
@@ -242,8 +268,7 @@ export default class BoardPresenter {
         remove(this.#loadingComponent);
 
         if (this.#isLoadError) {
-          this.#renderTripInfo();
-          this.#renderEmpty();
+          this.#renderError();
           return;
         }
 

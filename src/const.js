@@ -7,6 +7,14 @@ const FilterType = {
   PAST: 'past',
 };
 
+const SortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFER: 'offer',
+};
+
 const UserAction = {
   UPDATE_POINT: 'UPDATE_POINT',
   ADD_POINT: 'ADD_POINT',
@@ -32,4 +40,4 @@ const DEFAULT_POINT = {
   isFavorite: false,
 };
 
-export {EVENT_TYPES, FilterType, UserAction, UpdateType, DEFAULT_POINT, END_POINT};
+export {EVENT_TYPES, FilterType, SortType, UserAction, UpdateType, DEFAULT_POINT, END_POINT};
