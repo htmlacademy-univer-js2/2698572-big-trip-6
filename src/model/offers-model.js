@@ -13,8 +13,9 @@ export default class OffersModel {
   async init() {
     try {
       this.#offers = await this.#pointsApiService.offers;
-    } catch {
+    } catch (err) {
       this.#offers = [];
+      throw err;
     }
   }
 
