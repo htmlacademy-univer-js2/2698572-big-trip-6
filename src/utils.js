@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
-import {FilterType} from './const.js';
+import {FilterType, SortType} from './const.js';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -28,6 +28,24 @@ const filter = {
 function sortByDate(a, b) {
   return dayjs(a.dateFrom).diff(dayjs(b.dateFrom));
 }
+
+function getPointDuration(point) {
+  return dayjs(point.dateTo).diff(dayjs(point.dateFrom));
+}
+
+function sortByTime(a, b) {
+  return getPointDuration(b) - getPointDuration(a);
+}
+
+function sortByPrice(a, b) {
+  return b.basePrice - a.basePrice;
+}
+
+const sort = {
+  [SortType.DAY]: (points) => [...points].sort(sortByDate),
+  [SortType.TIME]: (points) => [...points].sort(sortByTime),
+  [SortType.PRICE]: (points) => [...points].sort(sortByPrice),
+};
 
 function getTripRoute(points, destinations) {
   if (points.length === 0) {
@@ -76,4 +94,4 @@ function getTripCost(points, offers) {
   }, 0);
 }
 
-export {filter, getTripRoute, getTripDates, getTripCost};
+export {filter, sort, getTripRoute, getTripDates, getTripCost};
